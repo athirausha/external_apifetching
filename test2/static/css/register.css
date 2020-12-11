@@ -1,0 +1,84 @@
+.divider-text {
+    position: relative;
+    text-align: center;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+.divider-text span {
+    padding: 7px;
+    font-size: 12px;
+    position: relative;   
+    z-index: 2;
+}
+.divider-text:after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    border-bottom: 1px solid #ddd;
+    top: 55%;
+    left: 0;
+    z-index: 1;
+}
+
+.btn-facebook {
+    background-color: #405D9D;
+    color: #fff;
+}
+.btn-twitter {
+    background-color: #42AEEC;
+    color: #fff;
+}
+.alert {
+  padding: 20px;
+  background-color:#b3a5a4;
+  color: white;
+  width:300px;
+  height: 100px;
+}
+
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.closebtn:hover {
+  color: black;
+}
+label{
+margin-right:5px;
+}
+input {
+padding:5px 7px;
+border:1px solid #d5d9da;
+box-shadow: 0 0 5px #e8e9eb inset;
+width:250px;
+font-size:1em;
+outline:0;
+margin-right:10px;
+}
+.short{
+color:#FF0000;
+}
+
+ .weak{
+color:#E66C2C;
+}
+
+ .good{
+color:#2D98F3;
+}
+
+.strong{
+color:#006400;
+}
+
+canvas{
+  /*prevent interaction with the canvas*/
+  pointer-events:none;
+}

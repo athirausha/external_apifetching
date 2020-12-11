@@ -1,0 +1,268 @@
+
+
+// function messages(messages, clr)
+// {
+//     $.notify({
+//         message: "<strong>"+messages+"</strong>"
+//     },
+//     {
+//         type: clr
+//     });
+// }
+
+
+
+
+
+    
+      
+             $(function() {
+               $("form[name='Login']").validate({
+                 rules: {
+                   
+                   email: {
+                     required: true,
+                     email: true
+                   },
+                   password: {
+                     required: true,
+                     
+                   }
+                 },
+                  messages: {
+                   email: "Please enter a valid email address",
+                  
+                   password: {
+                     required: "Please enter password",
+                    
+                   }
+                   
+                 },
+                 submitHandler: function(form) {
+                   form.submit();
+                 }
+               });
+             });
+             
+    
+    
+   
+  //  TO REGISTER
+    $('.createaccount').click(function(){
+      
+        var email =$('.email').val()
+        var password =$('.password').val()
+        var fname =$('.fname').val()
+        var mobile =$('.mobile').val()
+        var cpassword =$('.cpassword').val()
+        var type=$('.seltype option:selected').val()
+       
+        var val_captcha=$("#cpatchaTextBox").val()
+        console.log(val_captcha)
+       
+        
+
+        $.ajax({
+            type:"POST",
+            url: "/register_save/",
+            async:false,
+            data:{csrfmiddlewaretoken: window.CSRF_TOKEN, email:email, password:password,fname:fname,seltype:type,mobile:mobile,cpassword:cpassword},
+               
+            success: function(data){
+            console.log(data.data);
+            }
+
+            });
+  // To FETCH 10 ACTIVITIES ON REGISTER
+
+            for(i=0;i<10;i++)
+            {
+        $.ajax({
+            type: "GET",
+            url: "http://www.boredapi.com/api/activity?type="+type,
+            cache: false,
+            // data: dataString,
+            dataType: 'JSON',
+            
+            
+            success: function(data){
+                console.log(data);
+                console.log(data.activity);
+                activity=data.activity;
+                participants=data.participants;
+                type=data.type;
+                price=data.price;
+                accessibility=data.accessibility
+                link=data.link
+               
+                $.ajax({
+                    type:"POST",
+                    url: "/save_data/",
+                    async:false,
+                    data:{csrfmiddlewaretoken: window.CSRF_TOKEN,email:email, price:price, activity:activity,type:type,participants:participants,price:price,link:link,accessibility:accessibility},
+                       
+                    success: function(data){
+                    console.log(data.data);
+                    }
+        
+                    });
+            
+            
+            }
+            
+            });
+            setTimeout(function(){
+                      location.reload();
+                    }, 4000);
+            
+        }
+         // To FETCH 10 ACTIVITIES ON REGISTER END
+        
+    
+       
+        
+       
+        // fetch('http://www.boredapi.com/api/activity?type='+type)
+        // .then(res => res.json())//response type
+        // .then(data => console.log(data)); //log the data;
+    });
+
+      // REGISTER END
+
+
+
+     //  TO ADD 2 ACTIVITIES PER DAY
+
+    $('.adddata').click(function(){
+      console.log($('.adddata').attr('id'))
+     var mail=$('.adddata').attr('id')
+      $.ajax({
+        type:"POST",
+        url: "/sel_add_data/",
+        async:false,
+        data:{csrfmiddlewaretoken: window.CSRF_TOKEN,email:$('.adddata').attr('id')},
+           
+        success: function(data){
+        console.log(data.data);
+        console.log(data.type);
+            
+       
+         
+          $.ajax({
+            type: "GET",
+            url: "http://www.boredapi.com/api/activity?type="+data.type,
+            cache: false,
+            // data: dataString,
+            dataType: 'JSON',
+            
+            
+              success: function(data){
+              
+                  console.log(data);
+                  console.log(data.activity);
+                  activity=data.activity;
+                  participants=data.participants;
+                  type=data.type;
+                  price=data.price;
+                  accessibility=data.accessibility
+                  link=data.link
+                
+                    $.ajax({
+                        type:"POST",
+                        url: "/save_data/",
+                        async:false,
+                        data:{csrfmiddlewaretoken: window.CSRF_TOKEN,email:mail, price:price, activity:activity,type:type,participants:participants,price:price,link:link,accessibility:accessibility},
+                          
+                        success: function(data){
+                        console.log(data.data);
+                        
+            
+                        }
+                        
+                    });
+                        setTimeout(function(){
+                                location.reload();
+                              }, 2000);
+                
+                            }
+            
+          });
+        }
+       
+
+       
+
+    });
+
+
+     //  TO ADD 2 ACTIVITIES PER DAY END
+
+
+    //  EDIT ROW
+    $('.editbtn').click(function(){
+      // alert('hhhh')
+      mail=$('.adddata').attr('id')
+      console.log($(this).attr('id'))
+      row_id=$(this).attr('id')
+      if($(this).val()== 'Edit')
+      {
+      $('.editfield').prop('readonly', false);
+      // $(this).value('attr','Update')
+      $(this).closest('tr').find('td').css({'background-color':'lightblue', 'border':'none'})  
+      $('.editbtn').val('Update')
+      }
+      else{
+
+              activity=$('#'+ row_id).find('.activity').val(); 
+              // console.log(activity)
+              participants=$('#' + row_id).find('.participants').val()
+              type=$('#' + row_id).find('.type').val()
+              price=$('#' + row_id).find('.price').val()
+              accessibility=$('#' + row_id).find('.accessibility').val()
+              link=$('#' + row_id).find('.link').val()
+                
+                    $.ajax({
+                        type:"POST",
+                        url: "/update_data/",
+                        async:false,
+                        data:{csrfmiddlewaretoken: window.CSRF_TOKEN,row_id:row_id,price:price, activity:activity,type:type,participants:participants,price:price,link:link,accessibility:accessibility},
+                          
+                        success: function(data){
+                        console.log(data.data);
+                       
+                        }
+            
+                    });
+                        setTimeout(function(){
+                                location.reload();
+                              }, 2000);
+
+      }
+
+
+
+    });
+     //  EDIT ROW END
+
+    // TO DELETE ACTIVITY ON ADMIN VIEW PAGE
+
+    $('.deletebtn').click(function(){
+      row_id=$(this).attr('id')
+      $.ajax({
+        type:"POST",
+        url: "/delete_data/",
+        async:false,
+        data:{csrfmiddlewaretoken: window.CSRF_TOKEN,row_id:row_id},
+          
+        success: function(data){
+        console.log(data.data);
+        
+        }
+
+    });
+        setTimeout(function(){
+                location.reload();
+              }, 2000);
+
+    })
+    // TO DELETE ACTIVITY ON ADMIN VIEW PAGE END

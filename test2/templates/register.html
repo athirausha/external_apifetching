@@ -1,0 +1,210 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+    <script type="text/javascript"> window.CSRF_TOKEN = "{{ csrf_token }}"; </script>
+    <!------ Include the above in your HEAD tag ---------->
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.15.1/jquery.validate.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+
+    <!-- CAPTCHA -->
+
+   
+    
+</head>
+<body onload="createCaptcha()">
+ 
+
+<div class="container">
+<br>  
+
+<div class="card bg-light">
+<article class="card-body mx-auto" style="max-width: 400px;">
+	<h4 class="card-title mt-3 text-center">Create Account</h4>
+	
+	   <ul class="nav nav-tabs card-header-tabs" role="tablist">
+        <li class="nav-item"><a class="nav-link" id="one-tab" data-toggle="tab" href="#one" role="tab" aria-controls="One" aria-selected="true">User Account</a></li>
+        <li class="nav-item"><a class="nav-link" id="two-tab" data-toggle="tab" href="#two" role="tab" aria-controls="two" aria-selected="false">Admin Account</a></li>
+
+      </ul>
+   
+     
+    {% if messages %}
+    <!-- {% for message in messages %} -->
+  <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+    <!-- <button type="button" class="close" data-dismiss="alert" aria-label="Close"> -->
+      <!-- <span aria-hidden="true" >&times;</span>
+    </button> -->
+    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+    {{ message }}
+  </div>
+<!-- {% endfor %} -->
+{% endif %}
+
+<div class="tab-content" id="myTabCompany_ac">
+    <div class="tab-pane fade show active p-4" id="one" role="tabpanel" aria-labelledby="one-tab">
+
+     <div class="col-md-12">
+
+
+	
+	<div class="form-group input-group">
+		<div class="input-group-prepend">
+		    <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+		 </div>
+        <input  class="form-control fname" placeholder="Full name" type="text">
+    </div>
+
+    <div class="form-group input-group">
+    	<div class="input-group-prepend">
+		    <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
+		 </div>
+        <input class="form-control email" placeholder="Email address" type="email">
+    </div> 
+
+    <div class="form-group input-group">
+    	<div class="input-group-prepend">
+		    <span class="input-group-text"> <i class="fa fa-phone"></i> </span>
+		</div>
+		
+    	<input  class="form-control mobile" placeholder="Phone number" type="text">
+    </div> 
+
+    <div class="form-group input-group">
+    	<div class="input-group-prepend">
+		    <span class="input-group-text">Type</span>
+        </div>
+        <select class="custom-select seltype"  name="seltype">
+           
+		    <option value="education">Education</option>
+		    <option value="recreational">Recreational</option>
+		    <option value="social">Social</option>
+            <option value="diy">DIY</option>
+            <option value="charity">Charity</option>
+		    <option value="cooking">Cooking</option>
+		    <option value="relaxation">Relaxation</option>
+            <option value="music">Music</option>
+            <option value="busywork">Busywork</option>
+		</select>
+    </div>
+   
+    
+    
+    <div class="form-group input-group">
+    	<div class="input-group-prepend">
+		    <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+		</div>
+        <input class="form-control password pwd" placeholder="Create password" type="password" >
+    </div>
+    <div id="strength_message" style="margin-top: -10px;text-align:center;"></div>
+
+    <div class="form-group input-group">
+    	<div class="input-group-prepend">
+		    <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+		</div>
+        <input class="form-control cpassword" placeholder="Repeat password" type="password" >
+       
+    </div>  
+    <div class="form-group input-group">
+     <div class="pswdconfirm_message" style="margin-top: -10px;text-align:center;color:red"></div>
+    </div>
+     <!-- captcha -->
+     <div class="form-group input-group">
+        <!-- <form onsubmit="validateCaptcha()"> -->
+            <div id="captcha">
+            </div>
+            <input type="text" placeholder="Captcha" id="cpatchaTextBox"/>
+            <!-- <button type="submit">Submit</button> -->
+          <!-- </form> -->
+    </div>
+     <!-- captcha end-->
+    <div class="form-group input-group">
+        <div class="captcha_message" style="margin-top: -10px;text-align:center;color:red"></div>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary btn-block createaccount "> Create Account  </button>
+    </div>   
+    <p class="text-center">Have an account? <a href="/login">Log In</a> </p>                                                                 
+    
+    </div>
+</div>
+
+<div class="tab-pane fade show  p-3" id="two" role="tabpanel" aria-labelledby="two-tab">
+    <div class="col-md-12">
+        <form method="POST" action="/admin_registration/">
+            {% csrf_token %}
+            <div class="form-group input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                </div>
+                <input name="fname" class="form-control" placeholder="Full name" type="text">
+            </div>
+
+            <div class="form-group input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
+                 </div>
+                <input name="email" class="form-control" placeholder="Email address" type="email">
+            </div>
+
+           
+
+           
+            <div class="form-group input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+                </div>
+                <input class="form-control pwd" placeholder="Create password" type="password" name="password" >
+
+            </div>
+            <div class="strength_message" style="margin-top: -10px;text-align:center;"></div>
+        
+
+            <div class="form-group input-group" style="margin-top: 30px;">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+                </div>
+                <input class="form-control" placeholder="Repeat password" type="password" name="cpassword">
+
+            </div>
+            <div class="form-group input-group">
+                <div class="pswdconfirm_message" style="margin-top: -10px;text-align:center;color:red"></div>
+            </div>
+           
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-block create_personal_ac"> Create Account  </button>
+            </div>
+
+            <p class="text-center" style="color:white">Have an account? <a href="/login">Log In</a> </p>
+        </form>
+    </div>
+</div>
+
+</article>
+</div> 
+
+</div> 
+<!--container end.//-->
+
+<br><br>
+<script src="{% static 'js/main.js' %}"></script>
+<script src="{% static 'js/register.js' %}"></script>
+<script src='https://www.google.com/recaptcha/api.js'></script>
+
+
+
+</body>
+</html>
+
+<!-- site kwy --6LdTLeIZAAAAACTnQlycfRy6ue_mX9oDqCX8bDLl
+secret key --6LdTLeIZAAAAADfdsUfvlSnUqdccE58n9V0CvRK2 -->
